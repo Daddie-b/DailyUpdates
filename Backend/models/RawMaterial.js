@@ -2,11 +2,18 @@ const mongoose = require('mongoose');
 
 const RawMaterialSchema = new mongoose.Schema({
   name: String,
-  price: Number,  // Price per unit
-  inStock: Number, // Initial stock
-  used: { type: Number, default: 0 },  // Amount used
-  remaining: { type: Number, default: function () { return this.inStock - this.used; } },
-  outOfStock: { type: Boolean, default: function () { return this.remaining <= 0; } }
+  prices: [{
+    price: Number,
+    date: { type: Date, default: Date.now }
+  }],
+  initialStock: Number, // Set by admin
+  currentStock: Number, // Calculated field
+  dailyUsage: [{
+    date: Date,
+    quantity: Number
+  }],
+  lastUpdated: { type: Date, default: Date.now }
 });
+
 
 module.exports = mongoose.model('RawMaterial', RawMaterialSchema);
